@@ -22,7 +22,7 @@ def init_google_sheets():
         try:
             from google.cloud import secretmanager
             client = secretmanager.SecretManagerServiceClient()
-            name = f"projects/298391770247/secrets/google-credentials/versions/latest"
+            name = f"projects/subscriber-pipeline/secrets/google-credentials/versions/latest"
             response = client.access_secret_version(request={"name": name})
             credentials_json = response.payload.data.decode("UTF-8")
             credentials = ServiceAccountCredentials.from_json_keyfile_dict(
