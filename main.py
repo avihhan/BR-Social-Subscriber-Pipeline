@@ -269,7 +269,7 @@ def send_email_smtp(to_email, to_name, subject, html_content, advertisement_html
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>{subject}</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1; color: #333; margin: 0 auto; padding: 0px;">
+        <body style="font-family: Arial, sans-serif; line-height: 1; color: #333; margin: 0 auto; padding: 2px;">
             {html_content}
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
             {advertisement_html}
