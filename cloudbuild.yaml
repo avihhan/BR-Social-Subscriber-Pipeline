@@ -13,3 +13,9 @@ steps:
       - --memory=512MB
       - --timeout=540s
       - --set-env-vars=GOOGLE_SHEET_NAME="Subscriber List",SMTP_SERVER=smtp.gmail.com,SMTP_PORT=587,FROM_NAME="Subscriber Pipeline"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+# Optional: Explicitly specify service account for Cloud Build
+# serviceAccount: 'projects/brsocial/serviceAccounts/cloudbuild@brsocial.iam.gserviceaccount.com'
