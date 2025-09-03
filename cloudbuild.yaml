@@ -17,28 +17,6 @@ steps:
       - --set-env-vars=GOOGLE_SHEET_NAME="Subscriber List",SMTP_SERVER=smtp.gmail.com,SMTP_PORT=587,FROM_NAME="Subscriber Pipeline"
       - --service-account=subscriber-pipeline@appspot.gserviceaccount.com
 
-  # Grant the Cloud Function access to Secret Manager
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - projects
-      - add-iam-policy-binding
-      - 'subscriber-pipeline'
-      - --member=serviceAccount:subscriber-pipeline@appspot.gserviceaccount.com
-      - --role=roles/secretmanager.secretAccessor
-
-  # Make the function publicly accessible
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args:
-      - functions
-      - add-iam-policy-binding
-      - subscriber-pipeline
-      - --region=us-central1
-      - --member=allUsers
-      - --role=roles/cloudfunctions.invoker
-
 options:
   logging: CLOUD_LOGGING_ONLY
   machineType: 'E2_HIGHCPU_8'
-
-# Ensure we have the right permissions - use the Cloud Build service account
-serviceAccount: 'projects/subscriber-pipeline/serviceAccounts/200650928690@cloudbuild.gserviceaccount.com'
