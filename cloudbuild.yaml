@@ -26,9 +26,19 @@ steps:
       - --member=serviceAccount:subscriber-pipeline@appspot.gserviceaccount.com
       - --role=roles/secretmanager.secretAccessor
 
+  # Make the function publicly accessible
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - functions
+      - add-iam-policy-binding
+      - subscriber-pipeline
+      - --region=us-central1
+      - --member=allUsers
+      - --role=roles/cloudfunctions.invoker
+
 options:
   logging: CLOUD_LOGGING_ONLY
   machineType: 'E2_HIGHCPU_8'
 
-# Ensure we have the right permissions
-serviceAccount: 'projects/subscriber-pipeline/serviceAccounts/subscriber-pipeline@appspot.gserviceaccount.com'
+# Ensure we have the right permissions - use the Cloud Build service account
+serviceAccount: 'projects/subscriber-pipeline/serviceAccounts/200650928690@cloudbuild.gserviceaccount.com'
