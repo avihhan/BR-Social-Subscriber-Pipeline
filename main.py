@@ -17,7 +17,22 @@ app = Flask(__name__)
 def init_google_sheets():
     try:
         scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive','https://www.googleapis.com/auth/spreadsheets','https://www.googleapis.com/auth/drive.readonly']
-        credentials = ServiceAccountCredentials.from_json_keyfile_name('google-credentials.json', scope)
+        
+        # Try to get credentials from Secret Manager first (for Cloud Functions)
+        try:
+            from google.cloud import secretmanager
+            client = secretmanager.SecretManagerServiceClient()
+            name = f"projects/298391770247/secrets/google-credentials/versions/latest"
+            response = client.access_secret_version(request={"name": name})
+            credentials_json = response.payload.data.decode("UTF-8")
+            credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+                json.loads(credentials_json), scope
+            )
+        except Exception as secret_error:
+            # Fallback to local file for local development
+            print(f"Secret Manager failed, trying local file: {secret_error}")
+            credentials = ServiceAccountCredentials.from_json_keyfile_name('google-credentials.json', scope)
+        
         client = gspread.authorize(credentials)
         return client
     except Exception as e:

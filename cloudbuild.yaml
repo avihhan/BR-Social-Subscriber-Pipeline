@@ -14,6 +14,16 @@ steps:
       - --timeout=540s
       - --project=298391770247
       - --set-env-vars=GOOGLE_SHEET_NAME="Subscriber List",SMTP_SERVER=smtp.gmail.com,SMTP_PORT=587,FROM_NAME="Subscriber Pipeline"
+      - --service-account=298391770247-compute@developer.gserviceaccount.com
+
+  # Grant the Cloud Function access to Secret Manager
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - projects
+      - add-iam-policy-binding
+      - '298391770247'
+      - --member=serviceAccount:298391770247-compute@developer.gserviceaccount.com
+      - --role=roles/secretmanager.secretAccessor
 
 options:
   logging: CLOUD_LOGGING_ONLY
