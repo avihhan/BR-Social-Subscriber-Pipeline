@@ -12,10 +12,10 @@ steps:
       - --region=us-central1
       - --memory=512MB
       - --timeout=540s
-      - --project=subscriber-pipeline
+      - --project=brsocial
       - --no-gen2
       - --set-env-vars=GOOGLE_SHEET_NAME="Subscriber List",SMTP_SERVER=smtp.gmail.com,SMTP_PORT=587,FROM_NAME="Subscriber Pipeline"
-      - --service-account=subscriber-pipeline@appspot.gserviceaccount.com
+      - --service-account=br-social@brsocial.iam.gserviceaccount.com
 
 options:
   logging: CLOUD_LOGGING_ONLY
