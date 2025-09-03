@@ -496,27 +496,27 @@ def handle_health(request, headers):
     """Health check endpoint"""
     return (jsonify({'status': 'healthy', 'message': 'Subscriber Pipeline is running'}), 200, headers)
 
-# For local testing (optional)
+# Add routes for local Flask development
+@app.route('/health', methods=['GET'])
+def health_local():
+    return handle_health(None, {})
+
+@app.route('/subscribe', methods=['POST'])
+def subscribe_local():
+    return handle_subscribe(request, {})
+
+@app.route('/send-template-email', methods=['POST'])
+def send_template_email_local():
+    return handle_send_template_email(request, {})
+
+@app.route('/subscribers', methods=['GET'])
+def subscribers_local():
+    return handle_get_subscribers(request, {})
+
+@app.route('/unsubscribe', methods=['POST'])
+def unsubscribe_local():
+    return handle_unsubscribe(request, {})
+
+# Only for local testing
 if __name__ == '__main__':
-    # Add routes for local Flask development
-    @app.route('/health', methods=['GET'])
-    def health_local():
-        return handle_health(None, {})
-    
-    @app.route('/subscribe', methods=['POST'])
-    def subscribe_local():
-        return handle_subscribe(request, {})
-    
-    @app.route('/send-template-email', methods=['POST'])
-    def send_template_email_local():
-        return handle_send_template_email(request, {})
-    
-    @app.route('/subscribers', methods=['GET'])
-    def subscribers_local():
-        return handle_get_subscribers(request, {})
-    
-    @app.route('/unsubscribe', methods=['POST'])
-    def unsubscribe_local():
-        return handle_unsubscribe(request, {})
-    
     app.run(debug=True, host='0.0.0.0', port=8000)
