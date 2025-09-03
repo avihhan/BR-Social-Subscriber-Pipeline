@@ -15,7 +15,7 @@ steps:
       - --project=brsocial
       - --no-gen2
       - --set-env-vars=GOOGLE_SHEET_NAME="Subscriber List",SMTP_SERVER=smtp.gmail.com,SMTP_PORT=587,FROM_NAME="Subscriber Pipeline"
-      - --service-account=br-social-subscriber-pipeline@brsocial.iam.gserviceaccount.com
+      - --service-account=cloudbuild@brsocial.iam.gserviceaccount.com
 
 options:
   logging: CLOUD_LOGGING_ONLY
