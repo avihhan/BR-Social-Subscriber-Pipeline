@@ -351,10 +351,14 @@ def handle_subscribe(request, headers):
         return (jsonify({'error': 'Failed to connect to Google Sheets'}), 500, headers)
     
     spreadsheet_name = os.getenv('GOOGLE_SHEET_NAME', 'Subscriber List')
+    print(f"🔍 Trying to open spreadsheet: {spreadsheet_name}")
     try:
         spreadsheet = client.open(spreadsheet_name)
+        print(f"✅ Successfully opened spreadsheet: {spreadsheet.title}")
         sheet = spreadsheet.sheet1
+        print(f"✅ Successfully accessed sheet1: {sheet.title}")
     except Exception as e:
+        print(f"❌ Error accessing Google Sheet: {type(e).__name__}: {str(e)}")
         return (jsonify({'error': f'Error accessing Google Sheet: {str(e)}'}), 500, headers)
     
     # Check for duplicate email
