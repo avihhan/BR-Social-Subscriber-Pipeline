@@ -352,13 +352,13 @@ def handle_subscribe(request, headers):
     
     # Debug: List all available spreadsheets
     try:
-        print(f"🔍 Listing all available spreadsheets...")
-        all_spreadsheets = client.openall()
-        print(f"✅ Found {len(all_spreadsheets)} spreadsheets:")
-        for sheet in all_spreadsheets:
-            print(f"   - {sheet.title}")
+        SHEET_ID = "1G47eBaTt1nAjj0N5w5oO-Z6wWX7Z3Gtf-wvkmuLs33c"
+        print(f"🔍 Opening spreadsheet by ID: {SHEET_ID}")
+        spreadsheet = client.open_by_key(SHEET_ID)
+        sheet = spreadsheet.sheet1
+        print(f"✅ Successfully opened spreadsheet: {spreadsheet.title}")
     except Exception as e:
-        print(f"❌ Error listing spreadsheets: {type(e).__name__}: {str(e)}")
+        print(f"❌ Error accessing Google Sheet by ID: {type(e).__name__}: {str(e)}")
     
     spreadsheet_name = os.getenv('GOOGLE_SHEET_NAME', 'Subscriber List')
     print(f"🔍 Trying to open spreadsheet: {spreadsheet_name}")
