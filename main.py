@@ -198,7 +198,7 @@ def send_welcome_email(to_email, to_name):
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to BullRunAI</title>
   <style>
-    body {margin:0; padding:0; font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color:#f9fafb; color:#111827; line-height:1.6;}
+    body {margin:0; padding:0; font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color:#f9fafb; color:#111827; line-height:2;}
     .container {max-width:600px; margin:40px auto; background:#ffffff; border-radius:12px; padding:40px; border:1px solid #e5e7eb;}
     .logo {width:140px; margin-bottom:20px;}
     h1 {font-size:26px; margin:0 0 16px; color:#111827; font-weight:700;}
@@ -215,7 +215,7 @@ def send_welcome_email(to_email, to_name):
 <body>
   <div class="container">
     <img src="https://www.bullrunai.app/assets/br-DFdrvyGt.png" alt="BullRunAI" class="logo" style="height:60px; width:60px">
-    <h1>Welcome to BullRun, {{name}}</h1>
+    <h1>Welcome to BullRun, {{name}}!</h1>
     <p>
       Thank you for signing up. We’re building BullRunAI to redefine how people
       discover, share, and engage with investing ideas - powered by AI to help you
