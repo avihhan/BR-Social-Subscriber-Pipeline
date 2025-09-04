@@ -9,6 +9,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.header import Header
+SHEET_ID = "1G47eBaTt1nAjj0N5w5oO-Z6wWX7Z3Gtf-wvkmuLs33c"
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -146,10 +147,11 @@ def handle_send_template_email(request, headers):
     except Exception as e:
         return (jsonify({'error': f'Error loading template from Drive: {str(e)}'}), 500, headers)
     
+    SHEET_ID = "1G47eBaTt1nAjj0N5w5oO-Z6wWX7Z3Gtf-wvkmuLs33c"
     # Get subscribers from Google Sheets
     spreadsheet_name = os.getenv('GOOGLE_SHEET_NAME', 'Subscriber List')
     try:
-        spreadsheet = client.open(spreadsheet_name)
+        spreadsheet = client.open_by_key(SHEET_ID)
         sheet = spreadsheet.sheet1
     except Exception as e:
         return (jsonify({'error': f'Error accessing Google Sheet: {str(e)}'}), 500, headers)
@@ -363,7 +365,7 @@ def handle_subscribe(request, headers):
     spreadsheet_name = os.getenv('GOOGLE_SHEET_NAME', 'Subscriber List')
     print(f"🔍 Trying to open spreadsheet: {spreadsheet_name}")
     try:
-        spreadsheet = client.open(spreadsheet_name)
+        spreadsheet = client.open_by_key(SHEET_ID)
         print(f"✅ Successfully opened spreadsheet: {spreadsheet.title}")
         sheet = spreadsheet.sheet1
         print(f"✅ Successfully accessed sheet1: {sheet.title}")
@@ -436,10 +438,11 @@ def handle_get_subscribers(request, headers):
     client = init_google_sheets()
     if not client:
         return (jsonify({'error': 'Failed to connect to Google Sheets'}), 500, headers)
-    
+
+    SHEET_ID = "1G47eBaTt1nAjj0N5w5oO-Z6wWX7Z3Gtf-wvkmuLs33c"
     spreadsheet_name = os.getenv('GOOGLE_SHEET_NAME', 'Subscriber List')
     try:
-        spreadsheet = client.open(spreadsheet_name)
+        spreadsheet = client.open_by_key(SHEET_ID)
         sheet = spreadsheet.sheet1
     except Exception as e:
         return (jsonify({'error': f'Error accessing Google Sheet: {str(e)}'}), 500, headers)
@@ -460,10 +463,12 @@ def handle_unsubscribe(request, headers):
     client = init_google_sheets()
     if not client:
         return (jsonify({'error': 'Failed to connect to Google Sheets'}), 500, headers)
+
+    SHEET_ID = "1G47eBaTt1nAjj0N5w5oO-Z6wWX7Z3Gtf-wvkmuLs33c"
     
     spreadsheet_name = os.getenv('GOOGLE_SHEET_NAME', 'Subscriber List')
     try:
-        spreadsheet = client.open(spreadsheet_name)
+        spreadsheet = client.open_by_key(SHEET_ID)
         sheet = spreadsheet.sheet1
     except Exception as e:
         return (jsonify({'error': f'Error accessing Google Sheet: {str(e)}'}), 500, headers)
