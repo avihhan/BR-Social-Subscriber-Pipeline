@@ -188,61 +188,70 @@ def handle_send_template_email(request, headers):
 
 # Function to send welcome email using subscribed.html template from Google Drive
 def send_welcome_email(to_email, to_name):
-    """Send welcome email using subscribed.html template from Google Drive"""
+    """Send welcome email using embedded HTML template."""
     try:
-        # Initialize Google Drive client for templates
-        from googleapiclient.discovery import build
-        from googleapiclient.http import MediaIoBaseDownload
-        import io
-        
-        # Get credentials from Google Sheets client
-        client = init_google_sheets()
-        if not client:
-            print("Failed to initialize Google Sheets client")
-            return False
-        
-        # Create Drive service
-        drive_service = build('drive', 'v3', credentials=client.auth)
-        
-        # Search for the "Html Templates" folder
-        folder_query = "name='Html Templates' and mimeType='application/vnd.google-apps.folder' and trashed=false"
-        folder_results = drive_service.files().list(q=folder_query, spaces='drive').execute()
-        
-        if not folder_results['files']:
-            print("'Html Templates' folder not found in Google Drive")
-            return False
-        
-        templates_folder_id = folder_results['files'][0]['id']
-        
-        # Search for the subscribed.html template file
-        file_query = f"'{templates_folder_id}' in parents and name='subscribed.html' and trashed=false"
-        file_results = drive_service.files().list(q=file_query, spaces='drive').execute()
-        
-        if not file_results['files']:
-            print("Template 'subscribed.html' not found in 'Html Templates' folder")
-            return False
-        
-        template_file = file_results['files'][0]
-        
-        # Download template content
-        request_download = drive_service.files().get_media(fileId=template_file['id'])
-        fh = io.BytesIO()
-        downloader = MediaIoBaseDownload(fh, request_download)
-        done = False
-        while done is False:
-            status, done = downloader.next_chunk()
-        
-        template_content = fh.getvalue().decode('utf-8')
-        
-        # Personalize template
-        personalized_content = template_content.replace('{{name}}', to_name)
-        
-        # Send welcome email
+        # HTML template with placeholder for name
+        template_content = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to BullRunAI</title>
+  <style>
+    body {margin:0; padding:0; font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color:#f9fafb; color:#111827; line-height:1.6;}
+    .container {max-width:600px; margin:40px auto; background:#ffffff; border-radius:12px; padding:40px; border:1px solid #e5e7eb;}
+    .logo {width:140px; margin-bottom:20px;}
+    h1 {font-size:26px; margin:0 0 16px; color:#111827; font-weight:700;}
+    p {font-size:16px; margin:12px 0; color:#374151;}
+    .signature {margin-top:32px;}
+    .signature p {margin:4px 0;}
+    .cta {margin:32px 0;}
+    .button {background:#111827; color:#fff; text-decoration:none; padding:12px 28px; border-radius:8px; font-weight:600; font-size:16px; display:inline-block;}
+    .button:hover {background:#374151;}
+    .footer {font-size:13px; color:#6b7280; margin-top:24px;}
+    .footer a {color:#6b7280; text-decoration:underline;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://www.bullrunai.app/assets/br-DFdrvyGt.png" alt="BullRunAI" class="logo" style="height:60px; width:60px">
+    <h1>Welcome to BullRun, {{name}}</h1>
+    <p>
+      Thank you for signing up. We’re building BullRunAI to redefine how people
+      discover, share, and engage with investing ideas - powered by AI to help you
+      avoid the noise, missed opportunities, and endless scrolling.
+    </p>
+    <p>
+      You’re now on our early waitlist. As we roll out the platform, you’ll be
+      among the first to explore Spaces, connect with trusted creators, and see
+      the future of social investing unfold.
+    </p>
+    <div class="cta">
+      <a href="https://www.linkedin.com/company/bullrunai" class="button" target="_blank">Follow us on LinkedIn</a>
+    </div>
+    <div class="signature">
+      <p>With gratitude,</p>
+      <p>Founder's Office, BullRun</p>
+    </div>
+    <div class="footer">
+      <p>&copy; 2025 BullRunAI. All rights reserved.</p>
+      <p>
+        <a href="https://www.bullrunai.app/">Website</a> ·
+        <a href="mailto:founders@bullrunai.app">Contact</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>"""
+
+        # Replace placeholder with subscriber's name
+        personalized_content = template_content.replace("{{name}}", to_name or "Subscriber")
+
         subject = "Welcome to BullRunAI! 🚀"
-        advertisement_html = "<p>Thank you for joining our community!</p>"
-        
+        advertisement_html = ""  # Optional extra content if needed
+
         return send_email_smtp(to_email, to_name, subject, personalized_content, advertisement_html)
-        
+
     except Exception as e:
         print(f"Error sending welcome email: {e}")
         return False
