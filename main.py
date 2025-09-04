@@ -1,6 +1,7 @@
 import os
 import json
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -13,6 +14,7 @@ SHEET_ID = "1G47eBaTt1nAjj0N5w5oO-Z6wWX7Z3Gtf-wvkmuLs33c"
 
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)
 
 # Google Sheets setup
 def init_google_sheets():
